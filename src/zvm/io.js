@@ -355,7 +355,15 @@ module.exports = {
 	{
 		const Glk = this.Glk
 
-		if (!this.mainwin)
+		if (Glk.mainwin)
+		{
+			Glk.glk_cancel_line_event(Glk.mainwin);
+			Glk.glk_window_close(Glk.mainwin.parent, 0);
+			// Glk.gli_window_close(Glk.mainwin, true);
+			Glk.mainwin = undefined;
+		}
+
+		if (!Glk.mainwin)
 		{
 			// We will borrow the general approach of Bocfel to implement the Z-Machine's formatting model in Glk
 			// https://github.com/garglk/garglk/blob/master/terps/bocfel/screen.c
@@ -394,7 +402,8 @@ module.exports = {
 			Glk.glk_stylehint_set(0, 6, 5, 1)
 			Glk.glk_stylehint_set(0, 6, 6, 0)
 
-			this.mainwin = Glk.glk_window_open(0, 0, 0, 3, 201)
+			Glk.mainwin = Glk.glk_window_open(0, 0, 0, 3, 201)
+			this.mainwin = Glk.mainwin;
 			Glk.glk_set_window(this.mainwin)
 			if (this.version3)
 			{
